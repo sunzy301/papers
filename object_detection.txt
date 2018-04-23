@@ -9,12 +9,40 @@ object detection
 1.2 fcn
 
 1.3 fpn
+1.3.1 fpn
+1.3.2 detnet
 
 2 one stage model
 2.1 ssd
 2.1.1 ssd
+论文名称：SSD: Single Shot MultiBox Detector
+论文地址：1512.02325
+论文简要笔记:
+  快速的单阶段模型
+  SSD提取了不同尺度的特征图来做检测，大尺度特征图（较靠前的特征图）可以用来检测小物体，而小尺度特征图（较靠后的特征图）用来检测大物体
+  SSD采用了不同尺度和长宽比的先验框
+参考：（中文或英文Blog）
+  https://zhuanlan.zhihu.com/p/33544892
+  
 2.1.2 dssd
+论文名称：DSSD : Deconvolutional Single Shot Detector
+论文地址：1701.06659v1
+论文简要笔记:
+  基于ssd进行改进
+  使用resnet代替vgg
+  生成特征金字塔，encoder-decoder结构，将低层特征传输上来，明显提升小物体检测效果
+  其中含有倒卷积层，所以称为dssd
+参考：
+  https://zhuanlan.zhihu.com/p/33036037
+
 2.1.3 dsod
+论文名称：DSOD: Learning Deeply Supervised Object Detectors from Scratch
+论文地址：1708.01241v1
+论文简要笔记:
+  文章提出了一种可以基于dense的ssd结构改型，可以直接从随机参数开始在物体检测任务上训练
+  densenet可以比较方便地结合多尺寸特征层，而且参数较少，方便在少数据集情况下拟合训练
+参考：
+  https://zhuanlan.zhihu.com/p/31978363
 
 2.2 yolo
 yolo模型
@@ -57,6 +85,14 @@ yolo模型
   https://www.cnblogs.com/makefile/p/YOLOv3.html
 
 2.3 retina net
+论文名称：Focal Loss for Dense Object Detection
+论文地址：1708.02002v1
+论文简要笔记:
+  提出了retina net和focal loss
+  主要针对于物体检测任务中单阶段模型，前景和背景之间样本比例相差悬殊，极不平衡的问题。focal loss可以降低易分对的类别对于loss的贡献，增加hard negative对于loss的贡献
+  基于FPN作为基础模型结构，生成一个单阶段模型，基本都是FCN，速度比FPN+FSRCNN要快，效果也比较好
+参考：
+  主要针对于物体检测任务中单阶段模型，前景和背景之间样本比例相差悬殊，极不平衡的问题。focal loss可以降低易分对的类别对于loss的贡献，增加hard negative对于loss的贡献
 
 3 trick
 3.1 online hard example mining
@@ -76,3 +112,4 @@ caffe-ssd
 
 5.4 yolo
 darknet
+https://pjreddie.com/darknet/yolo/
