@@ -16,6 +16,6 @@ object_detection.txt
 
 ## 论文笔记demo
 论文名称：  
-论文地址：（arXiv）  
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf  
 论文简要笔记:  
 参考：（中文或英文Blog）  
