@@ -18,6 +18,16 @@ object detection
 
 2.2 yolo
 2.2.1 yolo v1
+论文名称：You Only Look Once: Unified, Real-Time Object Detection
+论文地址：1506.02640v5
+论文简要笔记: 
+  快速的物体检测
+  将图像划分为七块，直接对于每块预测其中是否有物体，物体边界以及大致的类别，不需要单独的RPN生成ROI
+  相比faster rcnn算法没有进行显示的物体边界检测，速度更快，但是准确性不足
+参考：（中文或英文Blog）
+  https://zhuanlan.zhihu.com/p/25236464
+  https://zhuanlan.zhihu.com/p/27029015
+  
 2.2.2 yolo v2
 2.2.3 yolo v3
 
