@@ -1,1 +1,37 @@
+CNN网络架构
+介绍各个网络结构与基础技术
+1 传统堆叠式结构
+1.1 Lenet
+1.2 Alexnet
+1.3 VGGnet
 
+2 Inception
+2.1 Inception v1
+2.2 Inception v2
+2.3 Inception v3
+2.4 Inception v4
+2.5 Inception-Resnet
+2.6 Xception
+
+3 Resnet
+3.1 Resnet
+3.2 RexNeXt
+
+4 Densenet
+4.1 Densenet
+4.2 ConDensenet
+
+5 移动端网络结构
+5.1 Squeezenet
+5.2 Mobilenet v1
+5.3 Shufflenet
+5.4 Mobilenet v2
+
+6 Other/Mix
+6.1 DPN
+6.2 SENet
+6.3 AutoML
+
+7 Survey
+7.1 Network in Network
+7.2 Design Pattern
