@@ -1,1 +1,16 @@
+semantic segmentation
+1 FCN
 
+2 SegNet
+
+3 DeepLab
+3.1 DeepLab v1
+3.2 DeepLab v2 
+3.3 DeepLab v3
+3.4 DeepLab v3+
+
+4 RefineNet
+
+5 PSPNet
+
+6 Large Kernel Matters
