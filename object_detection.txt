@@ -17,6 +17,10 @@ object detection
 2.1.3 dsod
 
 2.2 yolo
+yolo模型
+官网：https://pjreddie.com/darknet/yolo/
+基于darknet框架实现，实现语言为C
+
 2.2.1 yolo v1
 论文名称：You Only Look Once: Unified, Real-Time Object Detection
 论文地址：1506.02640v5
