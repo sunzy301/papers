@@ -1,1 +1,7 @@
 
+1 bottom-up model
+1.1 RMPE
+
+2 top-down model
+2.1 Openpose-CPM
+2.2 Openpose-Part Affinity Fields
