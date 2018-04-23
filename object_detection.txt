@@ -152,6 +152,12 @@ yolo模型
 
 4 survey
 4.1 speed/accuracy trade-off
+论文名称：Speed/accuracy trade-offs for modern convolutional object detectors
+论文地址：1611.10012v3
+论文简要笔记:
+ 分析了各种object detection模型结构的准确度和计算时间
+参考：
+ 论文结果由tensorflow object detection实现
 
 5 library
 5.1 tensorflow
