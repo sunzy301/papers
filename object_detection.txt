@@ -2,10 +2,35 @@ object detection
 1.two stage model
 1.1 rcnn
 1.1.1 rcnn
-1.1.2 overfeat
+论文名称：Rich feature hierarchies for accurate object detection and semantic segmentation
+论文地址：1311.2524
+论文简要笔记:
+ 深度学习做物体检测的开山之作
+ 使用selective search搜索候选区域
+ 基于CNN提取特征，并输入到SVM判断
+ 最后基于回归模型修正候选框位置
+参考：
+ https://zhuanlan.zhihu.com/p/23006190
+ 
 1.1.2 fast rcnn
+论文名称：Fast R-CNN
+ 基于RCNN改进：
+ 借鉴SPP思想，对于卷积特征进行共享，使用RoIPool层将原始RoI映射到feature层上
+ 使用联合目标训练，基于相同的特征训练分类与回归任务
+参考：（中文或英文Blog）
+ https://zhuanlan.zhihu.com/p/27582096
+ 
 1.1.3 faster rcnn
-
+论文名称：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks
+论文地址：1506.01497v3
+论文简要笔记:
+ 基于Fast RCNN修改
+ 使用RPN网络计算出RoI区域，代替selective search
+ 形成最基本的两阶段模型结构
+参考：
+ https://zhuanlan.zhihu.com/p/31426458
+ https://zhuanlan.zhihu.com/p/23341500
+ 
 1.2 rfcn
 
 1.3 fpn
