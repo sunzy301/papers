@@ -29,7 +29,28 @@ object detection
   https://zhuanlan.zhihu.com/p/27029015
   
 2.2.2 yolo v2
+论文名称：YOLO9000: Better, Faster, Stronger
+论文地址：1612.08242v1
+论文简要笔记:
+  yolo v2：
+  在yolo的基础上进行改进，而且速度快，并且可以根据输入分辨率在之前的和速度之间调整
+  具体改进：BN，高分辨率分类器，anchor boxes，细粒度特征跳接，多尺度训练，darknet19基干模型
+  yolo9000：
+  使用语义树产生多层次的分类，具体使用一层多个softmax分类实现多层的语义信息
+  基于coco和imagenet的联合训练，使用word tree合并不同的类别，能够学习位置类别的检测
+参考：
+  https://zhuanlan.zhihu.com/p/25167153
+  
+
 2.2.3 yolo v3
+论文名称：YOLOv3: An Incremental Improvement
+论文地址：https://pjreddie.com/media/files/papers/YOLOv3.pdf
+论文简要笔记:
+  更快的计算时间，达到同等效果
+  主要在于基础网络上进行改进，并且采用多维度的特征图输入
+  使用sigmoid做边框位置预测
+参考：
+  https://www.cnblogs.com/makefile/p/YOLOv3.html
 
 2.3 retina net
 
