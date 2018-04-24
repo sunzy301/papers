@@ -26,9 +26,45 @@ semantic segmentation
 
 3 DeepLab
 3.1 DeepLab v1
+论文名称：SEMANTIC IMAGE SEGMENTATION WITH DEEP CONVOLUTIONAL NETS AND FULLY CONNECTED CRFS
+论文地址：1412.7062v4
+论文简要笔记:
+ 本文构建了一个deeplab语义分割系统，目前效果最佳
+ 主要引入带孔卷积，在不对VGG模型感受野产生变化的同时，提高了最终热点特征图的分辨率
+ 还在CNN的基础上，使用CRF模型，对于细节部分进行完善
+参考：
+ https://zhuanlan.zhihu.com/p/34562137
+
 3.2 DeepLab v2 
+论文名称：DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs
+论文地址：1606.00915v1
+论文简要笔记:
+ 相比v1增加了金字塔结构，用于处理不同尺度的物体，称为ASPP
+ 并且使用Resnet代替vggnet
+ 使用全连接CRF进行后处理，取得更好的效果
+参考：
+ https://zhuanlan.zhihu.com/p/34562137
+ 
 3.3 DeepLab v3
+论文名称：Rethinking Atrous Convolution for Semantic Image Segmentation
+论文地址：1706.05587v3
+论文简要笔记:
+ 改进了空间维度上的金字塔空洞池化方法(ASPP)，加入了纯粹的图像pooling通路，有并行和串行的模式
+ 该模块级联了多个空洞卷积结构
+ 取消了最后的CRF
+参考：
+ https://blog.csdn.net/zziahgf/article/details/75314719
+ https://zhuanlan.zhihu.com/p/34562137
+ 
 3.4 DeepLab v3+
+论文名称：https://blog.csdn.net/Hibercraft/article/details/79499648
+论文地址：1802.02611v1
+论文简要笔记:
+ 结合带孔金字塔pooling和encoder-decoder结构
+ 使用改型的xception作为基础结构
+ 取得语义分割的最好效果
+参考：
+ https://zhuanlan.zhihu.com/p/34562137
 
 4 RefineNet
 论文名称：RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation
@@ -63,3 +99,8 @@ semantic segmentation
 7 Post processing
 7.1 CRF
 //TODO
+
+8 library
+8.1 tensorflow
+deeplab v3+ 使用slim实现
+ https://github.com/tensorflow/models/tree/master/research/deeplab
