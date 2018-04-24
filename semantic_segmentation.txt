@@ -1,7 +1,28 @@
 semantic segmentation
+0 survey
+截止到2017年语义分割综述论文
+原版：http://blog.qure.ai/notes/semantic-segmentation-deep-learning-review
+翻译：https://blog.csdn.net/u013580397/article/details/78508392
+
 1 FCN
+论文名称：Fully Convolutional Networks for Semantic Segmentation
+论文地址：1411.4038
+论文简要笔记:
+  第一次使用端到端的全卷积网络进行语义分割任务，领域的开山之作
+  可以利用Imagenet数据集预训练的结果
+  使用反卷积层进行上采样
+  引入跳接改善上采样时粗糙的像素定位
+参考：
+  https://www.cnblogs.com/xuanxufeng/p/6249834.html
 
 2 SegNet
+论文名称：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation
+论文地址：1511.00561
+论文简要笔记:
+  SegNet和DeconvNet、U-Net结构相似，都是Encode-Decoder结构，先将图像编码到一个固定长度语义向量，然后逐渐恢复出整个图像
+  在E-D结构的对应跳接上，使用MaxPooling提取信息
+参考：
+  https://zhuanlan.zhihu.com/p/26485877
 
 3 DeepLab
 3.1 DeepLab v1
@@ -10,7 +31,35 @@ semantic segmentation
 3.4 DeepLab v3+
 
 4 RefineNet
+论文名称：RefineNet: Multi-Path Refinement Networks for High-Resolution Semantic Segmentation
+论文地址：1611.06612
+论文简要笔记:
+  整体使用E-D结构，结合利用网络不同层的特征来实现高分辨率的语义分割
+  在结构组件中大量使用残差思想
+  每个RefineNet模块包含一个能通过对较低分辨率特征进行上采样来融合多分辨率特征的组件，以及一个能基于步幅为1及5×5大小的重复池化层来获取背景信息的组件
+参考：
+  https://zhuanlan.zhihu.com/p/26855653
 
 5 PSPNet
+论文名称：Pyramid Scene Parsing Network
+论文地址：1612.01105
+论文简要笔记:
+  基础采用FCN结构
+  提出了金字塔池化模块来聚合背景信息，以获取不同尺寸的 
+  在非最后一个层，使用了附加损失，防止梯度弥散
+参考：
+  https://blog.csdn.net/zziahgf/article/details/73294753
 
 6 Large Kernel Matters
+论文名称：Large Kernel Matters -- Improve Semantic Segmentation by Global Convolutional Network
+论文地址：1703.02719
+论文简要笔记:
+  总体采用E-D结构，使用大卷积核增大感受野
+  为了保持计算量不显著提升，使用inception思想，将k*k卷积拆分为1*k和k*1卷积
+  使用一个边界细化网络代替CRF
+参考：
+  https://zhuanlan.zhihu.com/p/29541472
+
+7 Post processing
+7.1 CRF
+//TODO
