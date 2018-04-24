@@ -149,6 +149,15 @@ yolo模型
 
 3 trick
 3.1 online hard example mining
+论文名称：Training Region-based Object Detectors with Online Hard Example Mining
+论文地址：1604.03540v1
+论文简要笔记:
+ 在线难例挖掘
+ 计算所有roi的loss，选择loss最大的roi，并且使用NMS保证其没有重叠
+ 选择出的难例没有正负样本区分，试用难例进行反向传播更新参数
+参考：
+ https://blog.csdn.net/donatellobzero/article/details/52094211
+ https://blog.csdn.net/u013608402/article/details/51275486
 
 4 survey
 4.1 speed/accuracy trade-off
