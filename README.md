@@ -1,10 +1,12 @@
 # papers
 ## CNN架构
+cnn_architecture.txt
 
 ## 物体检测
 object_detection.txt  
 
 ## 语义分割
+semantic_segmentation.txt
 
 ## 实例分割
 
