@@ -60,16 +60,24 @@ CNN网络架构
 
 3 Resnet
 3.1 Resnet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Deep Residual Learning for Image Recognition
+论文地址：1512.03385
 论文简要笔记:
-参考：（中文或英文Blog）
+  提出重要的残差卷积结构
+  可以更好地从低层跳接传输特征到上层，同样也可以帮助梯度回传，加速收敛
+  首次将模型层数增加到100层以上
+参考：
+  https://blog.csdn.net/wspba/article/details/57074389
 
 3.2 RexNeXt
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Aggregated Residual Transformations for Deep Neural Networks
+论文地址：1611.05431v2
 论文简要笔记:
-参考：（中文或英文Blog）
+  使用多个相同结构的通路进行计算，在每个通路中降低维度
+  实际操作中使用group conv
+  相较于普通的ResNet，可以在保持参数量和计算量的同时提高准确度
+参考：
+  https://blog.csdn.net/u014380165/article/details/71667916
 
 4 Densenet
 4.1 Densenet
