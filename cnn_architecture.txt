@@ -3,15 +3,20 @@ CNN网络架构
 1 传统堆叠式结构
 1.1 Lenet
 1.2 Alexnet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：ImageNet Classification with Deep Convolutional Neural Networks
+论文地址：https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 论文简要笔记:
+  首次使用CNN神经网络，在ImageNet分类任务上大幅度超过传统方法
 参考：（中文或英文Blog）
 
 1.3 VGGnet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION
+论文地址：1409.1556v6
 论文简要笔记:
+  VGG有A-E五种深浅不一的配置。
+  主要其多使用3*3的小卷积来代替Alexnet的大卷积。
+  并且提出一个CNN设计原则，feature map减半，则维度翻倍
+  A-E不同深度，如果需要训练深的网络，则先训练浅层网络，然后将浅层网络作为深层网络的初始值。
 参考：（中文或英文Blog）
 
 2 Inception
