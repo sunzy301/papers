@@ -7,7 +7,8 @@ CNN网络架构
 论文地址：https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
 论文简要笔记:
   首次使用CNN神经网络，在ImageNet分类任务上大幅度超过传统方法
-参考：（中文或英文Blog）
+参考：
+  https://blog.csdn.net/zyqdragon/article/details/72353420
 
 1.3 VGGnet
 论文名称：VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION
@@ -17,7 +18,8 @@ CNN网络架构
   主要其多使用3*3的小卷积来代替Alexnet的大卷积。
   并且提出一个CNN设计原则，feature map减半，则维度翻倍
   A-E不同深度，如果需要训练深的网络，则先训练浅层网络，然后将浅层网络作为深层网络的初始值。
-参考：（中文或英文Blog）
+参考：
+  https://blog.csdn.net/muyiyushan/article/details/62895202
 
 2 Inception
 2.1 Inception v1
@@ -71,22 +73,37 @@ CNN网络架构
 
 4 Densenet
 4.1 Densenet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Densely Connected Convolutional Networks
+论文地址：1608.06993v3
 论文简要笔记:
-参考：（中文或英文Blog）
+  创造了DenseNet
+  让每个层都连接之后所有的层，并且接受之前所有层的输入，形成一个独立的块
+  不同块之间用pooling与卷积调整大小
+  每个层的维度比较小，一般只有12
+  整个网络更加好训练，更加节约参数量，也能取得更好的分类效果
+参考：
+  https://blog.csdn.net/u012938704/article/details/53468483
+  https://blog.csdn.net/u014380165/article/details/75142664
 
 4.2 ConDensenet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：CondenseNet: An Efficient DenseNet using Learned Group Convolutions
+论文地址：1711.09224v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  创新点：让group是可学习的，但是通过index，在test过程中可以直接使用group卷积
+  整个过程相当于在做稀疏化，但是预测能够通用，计算量和参数量都很节省
+参考：
+  https://blog.csdn.net/linmingan/article/details/79800956
 
 4.3 CliqueNet
 论文名称：
 论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
 论文简要笔记:
-参考：（中文或英文Blog）
+  基于densenet思想设计的cliquenet，目标是尽可能减少参数量
+  主要改进是：
+  1.设计clique block，分为多个stage，stage1中使用densenet，之后的stage逐个更新原有的层，关键是不同stage中的层复用参数
+  2.多尺度特征输出，合并不同block然后进行分类
+参考：
+  http://tech.ifeng.com/a/20180523/45000747_0.shtml
 
 5 移动端网络结构
 5.1 Squeezenet
