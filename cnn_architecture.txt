@@ -117,8 +117,8 @@ CNN网络架构
   https://blog.csdn.net/linmingan/article/details/79800956
 
 4.3 CliqueNet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Convolutional Neural Networks with Alternately Updated Clique
+论文地址：1802.10419v3
 论文简要笔记:
   基于densenet思想设计的cliquenet，目标是尽可能减少参数量
   主要改进是：
@@ -127,30 +127,59 @@ CNN网络架构
 参考：
   http://tech.ifeng.com/a/20180523/45000747_0.shtml
 
+4.4 Peleenet
+论文名称：Pelee: A Real-Time Object Detection System on Mobile Devices
+论文地址：1804.06882v1
+论文简要笔记:
+  在densenet基础上改进了一个结构，称为peleenet
+  其主要是使用了stem块，以及双通路的dense layer
+  计算量比mobilenet v1低，imagenet以及voc，coco效果都更好
+参考：
+  https://blog.csdn.net/fengzhongluoleidehua/article/details/80297168
+
 5 移动端网络结构
 5.1 Squeezenet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：SQUEEZENET: ALEXNET-LEVEL ACCURACY WITH 50X FEWER PARAMETERS AND <0.5MB MODEL SIZE
+论文地址：1602.07360v4
 论文简要笔记:
-参考：（中文或英文Blog）
+  类似于AlexNet的堆叠卷积结构
+  全部使用1*1卷积和3*3卷积
+  其主体结构值得参考，可以使用更加复杂的block代替原有的堆叠卷积层
+参考：
+  https://blog.csdn.net/qinqbaobei/article/details/53946520
+  https://blog.csdn.net/shenxiaolu1984/article/details/51444525
 
 5.2 Mobilenet v1
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications
+论文地址：1704.04861v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  MobileNet，使用深度分离depthwise卷积和1*1卷积代替普通卷积，大幅度降低计算，保持原有性能不降低很多
+  实验证明，计算量越大，性能一般可以更好，分辨率能够比模型深度取得更好的效果
+参考：
+  https://blog.csdn.net/jesse_mx/article/details/70766871
+  https://blog.csdn.net/u013082989/article/details/77970196
 
 5.3 Shufflenet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices
+论文地址：1707.01083v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  本文发现目前基于深度分离卷积的模型，例如ResNeXt和Xception中，一个问题就是1*1卷积计算和参数占比都很大
+  为此本文提出使用group 1*1卷积，搭配shuffle操作，降低计算量
+  shufflenet在小计算量模型和场景检测上比mobilenet方案有较大提升
+参考：
+  https://blog.csdn.net/dxmkkk/article/details/76797648?locationNum=10&fps=1
+  https://blog.csdn.net/shuzfan/article/details/77141425
 
 5.4 Mobilenet v2
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Inverted Residuals and Linear Bottlenecks: Mobile Networks for Classification, Detection and Segmentation
+论文地址：1801.04381v2
 论文简要笔记:
-参考：（中文或英文Blog）
+  使用倒残差结构，中间层维度大，两边
+  每个块最后一个1*1卷积之后不跟上非线性变换
+  所以是linearbottleneck维度小
+参考：
+  https://blog.csdn.net/u014380165/article/details/79200958
+  https://blog.csdn.net/qq_14975217/article/details/79410324
 
 6 Other/Mix
 6.1 DPN
