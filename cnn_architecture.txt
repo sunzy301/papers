@@ -3,38 +3,142 @@ CNN网络架构
 1 传统堆叠式结构
 1.1 Lenet
 1.2 Alexnet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 1.3 VGGnet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 2 Inception
 2.1 Inception v1
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 2.2 Inception v2
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 2.3 Inception v3
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 2.4 Inception v4
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 2.5 Inception-Resnet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 2.6 Xception
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 3 Resnet
 3.1 Resnet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 3.2 RexNeXt
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 4 Densenet
 4.1 Densenet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 4.2 ConDensenet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
+4.3 CliqueNet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 5 移动端网络结构
 5.1 Squeezenet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 5.2 Mobilenet v1
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 5.3 Shufflenet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 5.4 Mobilenet v2
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 6 Other/Mix
 6.1 DPN
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 6.2 SENet
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 6.3 AutoML
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 7 Survey
 7.1 Network in Network
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
+
 7.2 Design Pattern
+论文名称：
+论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文简要笔记:
+参考：（中文或英文Blog）
 
 8 library
 8.1 caffe cls
