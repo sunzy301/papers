@@ -23,40 +23,53 @@ CNN网络架构
 
 2 Inception
 2.1 Inception v1
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Going deeper with convolutions
+论文地址：1409.4842
 论文简要笔记:
-参考：（中文或英文Blog）
+  提出Inception Block结构
+  首先提出使用多分支卷积然后合并的Block结构，并且配合中间层监督达到很好的分类效果
+  使用1*1卷积降低维度，减少计算量
+参考：
+  https://www.cnblogs.com/yinheyi/p/6930799.html
 
 2.2 Inception v2
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift
+论文地址：1502.03167
 论文简要笔记:
-参考：（中文或英文Blog）
+  提出Batch Nomalization层
+  其在训练的时候，根据一个mini-batch，将神经网络输出映射到[0,1]中
+  BN层是非常重要的CNN设计思想，能够大幅度提高模型收敛能力，防止梯度的弥散和爆炸
+参考：
+  https://blog.csdn.net/linmingan/article/details/50780761
+  https://blog.csdn.net/malefactor/article/details/51476961
 
 2.3 Inception v3
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Rethinking the Inception Architecture for Computer Vision
+论文地址：1512.00567v3
 论文简要笔记:
-参考：（中文或英文Blog）
+  去除所有大于3*3的卷积
+  可以使用多个3*3卷卷积叠加使用达到近似效果，或者使用1*k和k*1卷积的叠加使用
+参考：
+  https://blog.csdn.net/kangroger/article/details/69218625
 
 2.4 Inception v4
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning
+论文地址：1602.07261v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  提出Resnet和Inception混合的Block，可以结合两个模型的优势
+  又有多分支采样和卷积，又有残差链接
+参考：
+  https://blog.csdn.net/wspba/article/details/68951488?utm_source=itdadao&utm_medium=referral
 
-2.5 Inception-Resnet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+2.5 Xception
+论文名称：Xception: Deep Learning with Depthwise Separable Convolutions
+论文地址：1610.02357v3
 论文简要笔记:
-参考：（中文或英文Blog）
-
-2.6 Xception
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
-论文简要笔记:
-参考：（中文或英文Blog）
+  Xception是google继Inception后提出的对Inception v3的另一种改进，
+  主要是采用depthwise separable convolution来替换原来Inception v3中的卷积操作
+  depthwise卷积可以大幅度降低计算量
+参考：
+  https://blog.csdn.net/u014380165/article/details/75142710
 
 3 Resnet
 3.1 Resnet
@@ -65,6 +78,7 @@ CNN网络架构
 论文简要笔记:
   提出重要的残差卷积结构
   可以更好地从低层跳接传输特征到上层，同样也可以帮助梯度回传，加速收敛
+  Res Block一般以瓶颈结构设计，使用1*1卷积降维，然后使用3*3卷积提取特征，最后再用1*1卷积升维，以减少计算量
   首次将模型层数增加到100层以上
 参考：
   https://blog.csdn.net/wspba/article/details/57074389
