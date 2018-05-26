@@ -183,35 +183,44 @@ CNN网络架构
 
 6 Other/Mix
 6.1 DPN
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Dual Path Networks
+论文地址：1707.01629v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  用RNN连接了ResNet和DenseNet，ResNet更加好地复用低层特征，Dense更好地探索新的特征
+  DPN使用了双通路，连接Res和Dense两个部分
+  DPN可以以更小的参数量和计算量达到更好地效果
+参考：
+  https://blog.csdn.net/u014380165/article/details/75676216
 
 6.2 SENet
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Squeeze-and-Excitation Networks
+论文地址：1709.01507v1
 论文简要笔记:
-参考：（中文或英文Blog）
+  介绍了SE模块，其可以配合普通的卷积，提高模型能力
+  其主要目标是提升维度上的特征提取能力
+  分为squeeze，excitation和混合三个步骤，squeeze使用global pooling，生成channel向量，然后excitation用两个fc层生成一个调节向量，然后乘以feature  map上每个维度，重新生产特征图
+参考：
+  https://blog.csdn.net/Quincuntial/article/details/78605463
+  https://blog.csdn.net/u014380165/article/details/78006626
 
 6.3 AutoML
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Learning Transferable Architectures for Scalable Image Recognition
+论文地址：1707.07012v3
 论文简要笔记:
-参考：（中文或英文Blog）
+  使用增强学习，自动从数据集中学习最佳的网络结构
+  但是网络结构虽然理论数据比较好，但是因为其奇异的结构排布，实际计算速度比较慢
+参考：
+  https://blog.csdn.net/xjz18298268521/article/details/79079008
 
-7 Survey
+7 补充技巧
 7.1 Network in Network
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
+论文名称：Network in Network
+论文地址：1312.4400v3
 论文简要笔记:
-参考：（中文或英文Blog）
-
-7.2 Design Pattern
-论文名称：
-论文地址：（arXiv）https://https://arxiv.org/pdf/ID.pdf
-论文简要笔记:
-参考：（中文或英文Blog）
+  使用多层感知器代替传统的卷积+激活函数的模式，但是整个子结构依然依循卷积层的操作模式
+  最后的部分不使用FC层，而是对于每个channel进行平均，输出向量，再进行分类，即目前常用的global pooling
+参考：
+https://www.cnblogs.com/yinheyi/p/6978223.html
 
 8 library
 8.1 caffe cls
