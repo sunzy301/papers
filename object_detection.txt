@@ -191,3 +191,67 @@ model zoo
 5.4 yolo
 darknet
  https://pjreddie.com/darknet/yolo/
+ 
+6 few-shot
+6.1 active learning
+论文名称：Few-Example Object Detection with Model Communication
+论文地址：1706.08249v6
+论文简要笔记:
+ 类似于active learning结构
+ 初始很少的样本数量，然后逐步提升模型水平，其中anchor生成使用ss，因为其无需标记。过程中无需人工训练，以最小loss衡量，使用当前模型输出去训练下一轮模型。
+ 优势是对于样本的选择完全是自动的，而且采用多个模型互补。
+ 实验中误检比较多，无法和全标记训练相比
+参考：
+ https://www.cnblogs.com/Xiaoyan-Li/p/8604816.html
+ 
+6.2 weakly supervised
+只有图像级别标注，希望训练检测网络
+6.2.1
+论文名称：Weakly Supervised Deep Detection Networks
+论文地址：1511.02853v4
+论文简要笔记:
+ 本文主要解决完全没有物体框级别标记，只有图像级别标记情况下训练物体检测模型
+ 基于imagenet训练好的模型，使用ss生成默认anchor，spp提取特征，然后分为分类和检测两个通路，最后融合两个通路进行图像级别分类监督，最后这个是比较创新的部分，可以在inference时直接由两个通路产生检测结果
+参考：
+ https://blog.csdn.net/baidu_17806763/article/details/58587807
+
+6.2.2
+论文名称：Weakly Supervised Object Localization with Progressive Domain Adaptation
+论文地址：1710.04647
+论文简要笔记:
+ 本文针对于只有图像级别数据训练检测任务
+ 使用edge box无标签生成anchor，使用mask-out以及迁移训练的多标签模型筛选一部分，然后基于MIL生成图标级别标签，可以基于图像级别标签监督学习
+ 主要优势是利用分类迁移和检测迁移两步完成
+参考：
+ https://blog.csdn.net/roslei/article/details/52778549
+
+6.2.3
+论文名称：Soft Proposal Networks forWeakly Supervised Object Localization
+论文地址：1709.01829v1
+论文简要笔记:
+ 在传统CNN分类网络中加入proposal layer，使用多轮迭代的参数进行更新
+ 总体还是以热力图为检测输出
+ 可以达到端到端训练并且voc上比较好的效果
+参考：
+ 	https://blog.csdn.net/xunmige2791/article/details/79589996
+
+6.3 semi supervised
+6.3.1
+论文名称：LSDA: Large Scale Detection through Adaptation
+论文地址：1407.5035v3
+论文简要笔记:
+ 利用类别的关联性，将拥有标记标签强类别的检测参数迁移到弱类别上
+参考：
+ https://blog.csdn.net/u011380264/article/details/40746767
+
+6.3.2
+论文名称：Visual and Semantic Knowledge Transfer for Large Scale Semi-supervised Object Detection
+论文地址：1801.03145v2
+论文简要笔记:
+ 基于LSDA进行改进，LSDA将强类别的检测权重根据相关性迁移到弱类别上
+ 本文基于图像和语义两个层面衡量类别间相似程度
+ 图像使用CNN分类模型的输出向量的分类实数值，语义使用word2vec归类类别名称后得到
+ 添加了对于位置回归的迁移
+参考：
+
+ 
