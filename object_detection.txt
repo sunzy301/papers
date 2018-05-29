@@ -136,6 +136,17 @@ yolo模型
   使用sigmoid做边框位置预测
 参考：
   https://www.cnblogs.com/makefile/p/YOLOv3.html
+  
+2.2.4
+论文名称：Object detection at 200 Frames Per Second
+论文地址：1805.06361v1
+论文简要笔记:
+ 在yolo的基础上进行改进
+ 1.改进结构，降低维度，用1*1卷积增加深度
+ 2.使用知识蒸馏，大网络基于物体分类将结果以软标签传输给小网络作为监督信息，传输中使用Feature-NMS进行处理
+ 3.使用无标签数据，用大网络的结果给小网络进行训练
+参考：
+ https://blog.csdn.net/u014380165/article/details/80467007
 
 2.3 retina net
 论文名称：Focal Loss for Dense Object Detection
