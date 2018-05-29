@@ -96,6 +96,29 @@ object detection
   densenet可以比较方便地结合多尺寸特征层，而且参数较少，方便在少数据集情况下拟合训练
 参考：
   https://zhuanlan.zhihu.com/p/31978363
+  
+2.1.4 RefineDet
+论文名称：Single-Shot Refinement Neural Network for Object Detection
+论文地址：1711.06897v3
+论文简要笔记:
+ 结合单阶段模型和两阶段模型有点
+ 总体是SSD+FPN+Cascade的组合
+ ARM部分类似于SSD结构，预测物体前后景和初步微调，可以筛选一部分易分负样本数据，降低不平衡
+ ODM部分给予ARM结构，具体预测细分类别，以及第二阶段微调
+ TCB进行特征层反向传递，形成类似于FPN的结构
+参考：
+ https://blog.csdn.net/zhangjunhit/article/details/78869841
+ https://blog.csdn.net/qq_17550379/article/details/79082205
+
+2.1.5 RON
+论文名称：RON: Reverse Connection with Objectness Prior Networks for Object Detection
+论文地址：1707.01691v1
+论文简要笔记:
+ 给SSD添加了FPN的反向传递机制，可以将高层小尺寸的语义信息传递会低层大尺寸的语义
+ 然后在SSD的流程中添加了一个对于前后景的分类，用于减少易分负样本的数量，让训练更加平滑
+参考：
+ https://blog.csdn.net/DuinoDu/article/details/75013528
+
 
 2.2 yolo
 yolo模型
