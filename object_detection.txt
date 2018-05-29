@@ -31,7 +31,28 @@ object detection
  https://zhuanlan.zhihu.com/p/31426458
  https://zhuanlan.zhihu.com/p/23341500
  
+1.1.4 light-head rcnn
+论文名称：Light-Head R-CNN: In Defense of Two-Stage Object Detector
+论文地址：1711.07264v2
+论文简要笔记:
+ 认为两阶段模型检测部分计算 消耗太大
+ 于是进行消减，包括使用大卷积核与分离卷积做特征降低，并且直接使用fc层做分类和位置回归
+ 文章还是用了一个小的卷积基干网络，得到不错的效果
+参考：
+ https://blog.csdn.net/Dlyldxwl/article/details/78714195
+
+1.1.5 cascade rcnn
+论文名称：Cascade R-CNN: Delving into High Quality Object Detection
+论文地址：1712.00726
+论文简要笔记:
+ 多阶段的cascade rcnn模型
+ 每个阶段基于上一阶段的输出作为输入
+ 按阶段数量逐渐提高IoU阈值，可以得到更高质量的训练集，而且有上一轮的筛选，也不会造成不同类别之间的不平衡
+参考：
+ https://blog.csdn.net/wfei101/article/details/80024406
+ 
 1.2 rfcn
+1.2.1 rfcn
 论文名称：R-FCN: Object Detection via Region-based Fully Convolutional Networks
 论文地址：1605.06409v2
 论文简要笔记:
@@ -41,7 +62,31 @@ object detection
 参考：
  https://zhuanlan.zhihu.com/p/22261216
  https://zhuanlan.zhihu.com/p/30867916
- 
+
+1.2.2 rfcn3000
+论文名称：R-FCN-3000 at 30fps: Decoupling Detection and Classification
+论文地址：1712.01802v1
+论文简要笔记:
+ 超多类别物体检测的方案
+ 和yolo9000思想类似，需要分层分类
+ 一级类别基于FCN，进行物体的检测，二级类别单纯分类，基于RoIPooling出来的特征
+ 一级类别由ResNet产生的特征聚类得到
+参考：
+ https://blog.csdn.net/u014380165/article/details/78809002
+ https://blog.csdn.net/zhangjunhit/article/details/78874398
+
+1.2.3 deformable rfcn
+论文名称：Deformable Convolutional Networks
+论文地址：1703.06211v2
+论文简要笔记:
+ 提出一种可形变的CNN模型，包括可形变卷积和RoI池化
+ 具体思想是不固定输入，而是增加一个位置补偿
+ 位置补偿参数同样可以学习得到
+ 可形变CNN总体是一个稀疏采样思想，可以更好处理物体几何变化
+参考：
+ https://blog.csdn.net/yaoqi_isee/article/details/65963253
+ https://blog.csdn.net/u013010889/article/details/78803240
+
 1.3 fpn
 1.3.1 fpn
 论文名称：Feature Pyramid Networks for Object Detection
@@ -64,6 +109,16 @@ object detection
  最终模型需要基于imagenet进行预训练，然后配合FPN frcnn结构，取得最佳效果
 参考：
  http://www.sohu.com/a/228772624_129720
+ 
+1.3.3 MegDet
+论文名称：MegDet: A Large Mini-Batch Object Detector
+论文地址：1711.07240v4
+论文简要笔记:
+ 使用多卡多GPU训练物体检测模型，扩大batch size
+ lr层面使用warmup学习率
+ 增加了单机多卡的BN技术，使用allreduce实现跨多GPU的BN
+参考：
+ https://zhuanlan.zhihu.com/p/31805331
 
 2 one stage model
 2.1 ssd
