@@ -265,7 +265,208 @@ RoIs是[n,4]维度的二维矩阵，n是roi的数量
 
 还有两个简单cpp实现
 5)smooth_L1_loss用于位置微调的回归损失
+实现上可能存在weight_in和weight_out两个调整值
+而且具体还可以有一个sigma2调整smooth的具体计算方式
+
 6)ROIPooling层
+代码中硬编码使用maxpooling
+roi编码是[batch_index,x1,y1,x2,y2]
+其中batch_index是代表该roi对应batch中哪张图像
+之后的位置编码是基于原图的，所以需要设置spatial_scale来转换到feature map上的位置
 
 ############################################################
 4.refine det
+4.1 使用流程
+4.1.1 安装流程
+make all -j16
+
+编译Cython部分模块
+cd $RefineDet_ROOT/test/lib
+make -j 4
+Cython部分模块代码和和py-faster-caffe类似，可能会遇到相似问题，如果遇到一一解决即可
+其中包含util中bbox计算IoU部分代码，NMS的cpu与gpu实现，以及pycoco代码
+
+4.1.2 数据模型准备
+模型下载
+由于外网链接先只下载vgg
+https://gist.github.com/weiliu89/2ed6e13bfd5b57cf81d6
+这个vgg是全连接版本，使用卷积层代替fc层
+
+数据准备
+根据任务VOC0712，对于VOC2007进行测试
+数据格式，以及相关打包和测试与Caffe-SSD一致
+
+4.1.3 模型训练
+python example/refinedet/VGG16_VOC2007_320.py
+该训练脚本自动生成训练，测试，部署的prototxt，并可直接进行训练
+脚本编写风格类似于py-faster-rcnn
+
+训练是需要保证RefineDet的pycaffe版本是PYTHONPATH中的优先变量
+
+
+4.2 模型结构
+预测时使用DetectionOutput层
+输入包含odm以及arm的输出其中arm_priorbox是default anchor层
+
+4.2.1 TCB结构
+TCB Block结构
+类似于FPN的结构
+P就是ODM的特征层编号
+PX-up是从高层特征层到低层的倒卷积层
+TLX_1是第一个卷积层
+TLX_2是第二个卷积层，其激活层在eltwise层之后完成
+
+4.2.2 ARM结构
+ARM和SSD类似
+每个特征层输出三个，分别是前后景分类，位置微调回归，以及priorbox生成
+前后景分类结构如下
+位置微调回归
+priorbox生成
+最后合并多个特征层的前后景分类，位置微调回归，以及priorbox生成
+使用concat层实现
+训练的时候需要基于各个特征层的输出项，计算arm的loss
+
+4.2.3 ODM结构
+ODM和SSD类似
+每个特征层输出anchor的细致分类与位置回归微调
+细致分类
+位置回归微调
+最后合并多个特征层的细致分类和位置微调回归
+使用concat层实现
+训练的时候需要基于各个特征层的输出项，计算odm的loss
+
+4.2.4 head结构
+head与ssd的head一致
+1)每个特征层输出是
+[batch_size, channel, height_width]
+其中channel是特征层的维度
+
+2)然后经过一个卷积层，输出是
+[batch_size, channel, height_width]
+其中channel和head的类别有关系，一般是num_priorbox*num_class或者num_priorbox*4
+
+3)经过permute交换维度，输出是
+[batch_size, height, width, channel]
+permute是caffe-ssd添加的层
+
+4)flatten拉成向量,输出是
+[batch_size, height*width*channel]
+flatten是caffe原版自带的层
+
+5)合并多个特征层的输出
+[batch_size, sum_channel]
+分类和回归会分别合并一个特征输出，进行后续的结果输出或者损失计算
+concat是caffe原版自带的层
+
+
+4.3 新增关键层
+4.3.1 annotated_data_layer
+数据读入层的prototxt定义主要包含如下几个参数
+data_param是基础的batchsize以及lmdb位置
+transform_param是数据增强参数
+annotated_data_param包含batch_sample以及label_map_file
+
+DataLayerSetUp函数读入annotated_data_layer的预设参数，并且reshape输出blob大小
+从lmdb读出数据时，需要对于gt bbox的shape进行特殊编排
+每个样本的bbox数量不完全一致
+把每个bbox的信息存储成一个8维的向量
+读入数据预处理的顺序是
+1)distort， expand
+2)batch sample
+3)transform（mirror，scale，crop）
+bbox信息会跟着预处理改变，以保证匹配实际图像
+
+4.3.2 permute_layer
+交换输入channel
+
+count是blob所有元素的数量，对齐进行遍历
+然后根据新旧order顺序计算新的位置
+steps是不同维度，之前所有维度长度的乘积
+
+4.3.3 detection_output_layer
+输入包含arm和odm的合并输出层
+
+RefineDet的arm和loc预测输出都是共享类别的，所有类别产生一组位置微调delta
+这个类似于SSD，和Faster-Rcnn不一致
+
+其中后处理根据每个类别进行NMS
+然后对于每张图像，设置一个最大keep_top_k，需要根据score进行排序，挑选概率最大的检测结果
+输出是一个[1,1,N,7]的blob
+其中N是该batch所有的检测结果的总数，可能包含了不同图像的结果
+image_id指定在这个里面了
+
+该层还可以存储检测结果
+存储于xml或json格式（取决于任务类型VOC or COCO），以及在图像上的输出
+
+4.3.4 detection_evaluate_layer
+层的输入就是detection_out和gt_label
+
+输出维度是[1,1,N,5]
+其中N是检测数量+类别数量
+5维分别代表
+
+对于类别数量部分，记录的是gt中实际类别的数量
+对于检测数量部分，记录检测是正样本还是负样本，使用true_pos和false_pos记录
+
+判断正样本和负样本逻辑：
+固定一张图像和一个类别，对于多个检测结果进行conf排序，然后从高到低匹配
+如果一个检测和一个gtbox的IoU大于0.5，则两者匹配，认为是true_pos；之后的检测再与这个gtbox匹配就是重复匹配，认为是false_pos
+
+4.3.5 normalize_layer
+基础功能是将特征层按照单个cell的不同维度，归一化到[0,1]范围内
+然后根据预设的超参数乘以scale系数
+
+4.3.6 smooth_L1_loss_layer
+使用fast-rcnn提出的smooth L1 loss用于位置微调回归
+
+4.3.7 multibox_loss_layer
+基本复用了SSD的代码
+训练阶段有两个multibox，ARM和ODM各有一个层输入
+
+Odm阶段不会直接把loss的梯度回传给arm层
+在multibox中分别计算loc和conf的loss，然后加在一起
+需要考虑odm阶段中还有arm的loc和conf
+训练时需要为每个输出的box匹配gt以计算损失
+具体匹配策略：match_type 在作者的代码中设置为PER_PREDICTION，即对每个 gnd box，选择最佳      匹配的prior box作为positive box；以及对每个prior box，如果与其覆盖率最高的gnd box的覆盖率超过overlap_threshold，也将其作为positive box
+
+MineHardExamples中实现基于arm的筛选和最终的训练样本筛选
+以保证正负样本比例合适
+ 在进行hard neg mining时，按如下步骤进行计算：
+    - 计算每个prior box的confidence loss。
+    - 如果mining_type为HARD_EXAMPLE，计算location loss，并将location loss和conf
+      loss加起来作为损失。注意prior box和gnd box为(xmin, ymin, xmax, ymax)格式，
+      但location pred为(ncx, ncy, nw, nh)格式，其中ncx，ncy为中心点偏移，用prior
+      box宽高和variance[0]和 variance[1]归一化。nw和nh为宽度和高度偏移，用prior 
+      box宽高和variance[2]和variance[3]归一化。需要依次调用EncodeLocPrediction和
+      ComputeLocLoss计算位置损失。
+    - 如果has_nms_param为true，则对negative window进行nms后再选取。
+      如果use_prior_for_nms，则使用prior box进行nms，否则使用pred box进行nms。在
+      进行nms之前需要先调用DecodeBBoxes将pred bbox转化为(xmin, ymin, xmax, ymax)
+      格式，然后再调用ApplyNMS。
+    - 如果mining_type为MAX_NEGATIVE，则根据neg_pos_ratio以及positive数目确定选取
+      的negative数目，否则根据sample_size确定要选取的negative数目
+
+
+4.3.8 prior_box_layer
+该层用于生成初始的anchor
+层输入和设置，其中min_size就是box的长度，aspect_ratio是box的比例
+variance表示长和宽对于loss贡献不同，以进行归一化
+输出维度为 [1,2,H*W*num_prior*4]
+初始default anchor数量计算公式
+Num_prior = aspect_size.size() * min_size.size()
+If max_size:
+	Num_prior++
+	
+
+辅助文件
+1)bbox_util
+包含各种对于bbox的处理函数
+包括nms，难例挖掘，检测结果和gt的匹配等
+具体可见bbox_util.hpp
+
+2)im_transform
+图像预处理函数
+主要难点是检测框需要随着预处理变动，保证和图像能够对应
+
+3)sampler
+Batch sampler采样，用于数据增强
