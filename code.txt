@@ -1,0 +1,14 @@
+1.caffe cosine
+修改caffe中 sgd_solver.cpp
+else if (lr_policy == "cosine") {
+    rate = (this->param_.base_lr() - this->param_.min_lr()) * Dtype(0.5) * 
+         (cos(Dtype(3.141592653) * (this->iter_ % this->param_.stepsize()) / this->param_.stepsize())
+         + Dtype(1.0)) + this->param_.min_lr();
+  }
+cosine方法对于分类网络训练效果有普适性提高
+
+2.ssd
+
+3.py faster rcnn
+
+4.refine det
