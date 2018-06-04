@@ -5,6 +5,10 @@ else if (lr_policy == "cosine") {
          (cos(Dtype(3.141592653) * (this->iter_ % this->param_.stepsize()) / this->param_.stepsize())
          + Dtype(1.0)) + this->param_.min_lr();
   }
+在caffe.proto中添加solver parameter
+// for cosine learning rate policy
+  optional int32 Titer = 51;
+  optional float min_lr = 50 [default = 0.0];
 cosine方法对于分类网络训练效果有普适性提高
 
 2.ssd
