@@ -11,6 +11,7 @@ else if (lr_policy == "cosine") {
   optional float min_lr = 50 [default = 0.0];
 cosine方法对于分类网络训练效果有普适性提高
 
+############################################################
 2.ssd
 2.1 安装编译
 安装流程
@@ -149,7 +150,122 @@ count是blob所有元素的数量，对齐进行遍历
 然后根据新旧order顺序计算新的位置
 steps是不同维度，之前所有维度长度的乘积
 
-
+############################################################
 3.py faster rcnn
+3.1 安装流程
+Installation (sufficient for the demo)
+	1. Clone the Faster R-CNN repository
+# Make sure to clone with --recursive
+git clone --recursive https://github.com/rbgirshick/py-faster-rcnn.git
+	1. We'll call the directory that you cloned Faster R-CNN into FRCN_ROOT
+Ignore notes 1 and 2 if you followed step 1 above.
+Note 1: If you didn't clone Faster R-CNN with the --recursive flag, then you'll need to manually clone the caffe-fast-rcnn submodule:
+git submodule update --init --recursive
+Note 2: The caffe-fast-rcnn submodule needs to be on the faster-rcnn branch (or equivalent detached state). This will happen automatically if you followed step 1 instructions.
+	2. Build the Cython modules
+cd $FRCN_ROOT/lib
+make
+	3. Build Caffe and pycaffe
+cd $FRCN_ROOT/caffe-fast-rcnn
+# Now follow the Caffe installation instructions here:
+#   http://caffe.berkeleyvision.org/installation.html
 
+# If you're experienced with Caffe and have all of the requirements installed
+# and your Makefile.config in place, then simply do:
+make -j8 && make pycaffe
+	4. Download pre-computed Faster R-CNN detectors
+cd $FRCN_ROOT
+./data/scripts/fetch_faster_rcnn_models.sh
+This will populate the $FRCN_ROOT/data folder with faster_rcnn_models. See data/README.md for details. These models were trained on VOC 2007 trainval.
+
+参考 <https://github.com/rbgirshick/py-faster-rcnn#installation-sufficient-for-the-demo> 
+
+faster-rcnn文件夹下make
+编译目标是utils.cython_bbpx, nms.cpu_nms, nms.gpu_nms, pycocotools._mask
+其余相对于fast-rcnn新增的层是python编写的
+
+3.1.1 安装问题
+1)-R gcc参数不支持
+修改python中distutils/unixcompiler.py,
+将-R改为-Wl,rpath=
+
+2)cudnn支持版本过低
+需要将fast-rcnn中内容合并到最新的caffe版本中，可以使用git合并
+可以参考：http://www.voidcn.com/article/p-nzbjzafl-cc.html
+
+由于无法链接github，使用beyondcompare进行手动合并
+将所有fast-rcnn中新增文件复制到caffe-master文件夹中，并且需要手动合并caffe.proto和blocking_queue.cpp中的修改内容
+修改python_layer.hp
+版本合并后，打开caffe-fast-rcnn/include/caffe/layers/python_layer.hp，self_.attr("phase") = static_cast<int>(this->phase_);这一行(line29)删除 
+
+3.1.2 运行demo
+./tools/demo.py
+
+1)遇到如下问题
+has no attribute 'param_str_'
+将proposal_layer.py文件中param_str_修改为param_str
+
+2.遇到如下问题
+has no attribute 'phase_'
+主要原因是python文件相对于caffe版本比较古老，已经有了变化
+在config.py中添加一个phase项
+__C.PHASE='TEST'
+然后将proposal_layer.py中的内容进行修改
+cfg_key = cfg.PHASE
+
+demo是faster rcnn的测试过程
+测试中boxes提取RPN生成的RoIs
+
+RoIs是[n,4]维度的二维矩阵，n是roi的数量
+
+然后读取位置回归的数据，会对于每个类别有个回归的微调值
+回归微调值box_deltas是[n,21*4]维度的二维数据，n是roi的数量
+每个box加上微调的delta值，也变成[n,21*4]维度的二维数据pred_boxes
+加上roi的类别分数矩阵scores，其维度是[n,21]
+
+3.2 模型结构
+标准faster rcnn使用VGG作为基础结构，主要是添加了RPN结构，以及增加ROIPooling和之后的检测端
+从VGG的5_3卷积出提取特征，经过rpn卷积层
+设置每个位置应该对应于9个anchor
+左边通路产生36维特征图，对应于4*9，每个anchor有4维位置
+右边通路产生18维特征图，对应于2*9，每个anchor进行softmax分类，是物体还是背景
+最后合并两个维度输入，产生roi，这个层是自定义的proposal_layer
+
+训练时，需要使用rpn-data从gt中进行box的对应，使用anchor_target_layer层
+然后基于rpn前后景分类和位置信息回归计算损失函数，分别是rpn_loss_cls和rpn_loss_bbox
+
+
+3.3 新增关键层
+1)proposal_layer.py
+生成anchor，输入是rpn计算得到的anchor类别和delta微调
+每个cell都会共享默认anchor，然后基于cell的位置计算具体anchor位置
+之后需要加上rpn生成的微调值
+最后基于rpn对于前后景分类的分数进行nms，减少anchor数目
+
+2)proposal_target_layer.py
+输入是rpn生成的roi和gt boxes
+为每个roi设置分类以及回归的目标
+计算roi和gt boxes的重叠系数，然后将重叠系数比较大的设为正样本，中间范围的设为负样本
+正负样本组合送特征提取和之后的训练
+只有正样本才会设置微调的目标
+
+3)Anchor_target_layer.py
+将rpn生成的anchor对应到gt box上
+产生rpn对于anchor前后景分类以及位置微调的目标
+
+基本算法：
+在每个位置计算一组anchor
+筛选在图像位置内的anchor
+计算每个保留anchor和gtboxes的重叠系数
+设置每个保留anchor的前后景label以及位置微调回归目标值
+
+4)roi_data_layer
+数据读入层
+输出图像data，图像长宽信息im_info，以及标记信息gt_boxes
+
+还有两个简单cpp实现
+5)smooth_L1_loss用于位置微调的回归损失
+6)ROIPooling层
+
+############################################################
 4.refine det
