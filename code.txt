@@ -12,6 +12,143 @@ else if (lr_policy == "cosine") {
 cosine方法对于分类网络训练效果有普适性提高
 
 2.ssd
+2.1 安装编译
+安装流程
+# Modify Makefile.config according to your Caffe installation.
+cp Makefile.config.example Makefile.config
+make -j8
+# Make sure to include $CAFFE_ROOT/python to your PYTHONPATH.
+make py
+make test -j8
+# (Optional)
+make runtest -j8
+
+参考 <https://github.com/weiliu89/caffe/tree/ssd> 
+总体基本和caffe原版一致
+
+
+运行make之后出现如下错误：
+/usr/include/boost/property_tree/detail/json_parser_read.hpp:257:264: error: ‘type name’ declared as function returning an array 
+escape 
+^ 
+/usr/include/boost/property_tree/detail/json_parser_read.hpp:257:264: error: ‘type name’ declared as function returning an array 
+make: * [.build_release/cuda/src/caffe/layers/detection_output_layer.o] Error 1 
+make: * Waiting for unfinished jobs….
+解决办法： 
+修改json_parser_read.hpp：打开文件夹Document，选中computer，在搜索json_parser_read.hpp，找到该文件的路径之后用如下命令打开
+sudo gedit /usr/include/boost/property_tree/detail/json_parser_read.hpp
+将257行开始的escape代码段注释掉即可，如下：
+/*escape
+                    =   chset_p(detail::widen<Ch>("\"\\/bfnrt").c_str())
+                            [typename Context::a_escape(self.c)]
+                    |   'u' >> uint_parser<unsigned long, 16, 4, 4>()
+                            [typename Context::a_unicode(self.c)]
+                    ;*/
+
+参考 <https://blog.csdn.net/u013832707/article/details/53426923> 
+应该升级gcc到5.x版本，但是这样改动比较大，直接修改也可以
+
+2.2 数据读入
+2.2.1 准备数据集
+Voc2007&2012
+下载三个数据集
+# Download the data.
+cd $HOME/data
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar
+# Extract the data.
+tar -xvf VOCtrainval_11-May-2012.tar
+tar -xvf VOCtrainval_06-Nov-2007.tar
+tar -xvf VOCtest_06-Nov-2007.tar
+
+2.2.2 创建lmdb文件
+cd $CAFFE_ROOT
+# Create the trainval.txt, test.txt, and test_name_size.txt in data/VOC0712/
+创建训练验证集与测试集的图像标记列表
+并且为混淆训练验证集顺序，记录测试集的图像大小
+./data/VOC0712/create_list.sh
+# You can modify the parameters in create_data.sh if needed.
+# It will create lmdb files for trainval and test with encoded original image:
+#   - $HOME/data/VOCdevkit/VOC0712/lmdb/VOC0712_trainval_lmdb
+#   - $HOME/data/VOCdevkit/VOC0712/lmdb/VOC0712_test_lmdb
+# and make soft links at examples/VOC0712/
+创建lmdb
+./data/VOC0712/create_data.sh
+
+该脚本会调用scripts/create_annoset.py进行变量的检查
+最终会使用build/tools/convert_annoset工具进行lmdb打包
+核心的读入函数为ReadRichImageToAnnotatedDatum
+读入的图像可能使用jpg编码存储在lmdb中以节约空间
+
+标记数据存储结构
+一级结构AnnotationDatum
+包含Datum存储图像数据，以及多个AnnotationGroup，每个代表一个类别
+一个AnnontationGroup有一个类别，对应多个Annotation AnnotationGroup
+每个Annotation对应一个框，包含在Group中编号和一个位置BBOX Annotation
+位置BBOX NormalizedBBox
+
+2.3 模型结构
+2.3.1 生成模型结构
+创建prototxt文件并且进行运行
+
+# It will create model definition files and save snapshot models in:
+#   - $CAFFE_ROOT/models/VGGNet/VOC0712/SSD_300x300/
+# and job file, log file, and the python script in:
+#   - $CAFFE_ROOT/jobs/VGGNet/VOC0712/SSD_300x300/
+# and save temporary evaluation results in:
+#   - $HOME/data/VOCdevkit/results/VOC2007/SSD_300x300/
+# It should reach 77.* mAP at 120k iterations.
+python examples/ssd/ssd_pascal.py
+
+具体结构参考文档
+https://blog.csdn.net/u014380165/article/details/72824889
+对于每个特征层
+都会有一个priorbox层，生成默认的box位置，这个不参与梯度回传
+然后会有两个head，分别预测位置回归和类别分类
+每个head由一个卷积层，一个permute层，一个flat层组成，后面两个层主要是变换shape
+最后由concat层合并各个层的head，送到loss计算或者输出检测结果
+
+
+2.3.2 SSD 检测head
+1)每个特征层输出是
+[batch_size, channel, height_width]
+其中channel是特征层的维度
+
+2)然后经过一个卷积层，输出是
+[batch_size, channel, height_width]
+其中channel和head的类别有关系，一般是num_priorbox*num_class或者num_priorbox*4
+
+3)经过permute交换维度，输出是
+[batch_size, height, width, channel]
+permute是caffe-ssd添加的层
+
+4)flatten拉成向量,输出是
+[batch_size, height*width*channel]
+flatten是caffe原版自带的层
+
+5)合并多个特征层的输出
+[batch_size, sum_channel]
+分类和回归会分别合并一个特征输出，进行后续的结果输出或者损失计算
+concat是caffe原版自带的层
+
+2.4 新增关键层
+2.4.1 数据读入层
+读入数据预处理的顺序是
+1)distort, expand
+2)batch sample
+3)transform（mirror, scale, crop）
+
+从lmdb读出数据时，需要对于gt bbox的shape进行特殊编排
+每个样本的bbox数量不完全一致
+把每个bbox的信息存储成一个8维的向量
+
+2.4.2 permuate layer
+交换输入blob的channel
+count是blob所有元素的数量，对齐进行遍历
+然后根据新旧order顺序计算新的位置
+steps是不同维度，之前所有维度长度的乘积
+
 
 3.py faster rcnn
 
